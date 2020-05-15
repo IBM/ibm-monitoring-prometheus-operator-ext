@@ -19,6 +19,8 @@ package model
 import (
 	"bytes"
 	"html/template"
+	"os"
+	"reflect"
 	"time"
 
 	promv1 "github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
@@ -28,7 +30,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 
-	exportersv1alpha1 "github.com/IBM/ibm-monitoring-exporters-operator/pkg/apis/monitoring/v1alpha1"
 	promext "github.com/IBM/ibm-monitoring-prometheus-operator-ext/pkg/apis/monitoring/v1alpha1"
 )
 
@@ -188,7 +189,20 @@ func prometheusSvcSelectors(cr *promext.PrometheusExt) map[string]string {
 	selectors[string(Prometheus)] = PromethuesName(cr)
 	return selectors
 }
+func promeImage(cr *promext.PrometheusExt) *string {
+	return imageName(os.Getenv(promeImageEnv), cr.Spec.PrometheusConfig.ImageRepo)
+}
 
+func prometheusDefaultResources() v1.ResourceRequirements {
+	mem, _ := resource.ParseQuantity("1Gi")
+	cpu, _ := resource.ParseQuantity("200m")
+	return v1.ResourceRequirements{
+		Requests: v1.ResourceList{
+			v1.ResourceMemory: mem,
+			v1.ResourceCPU:    cpu,
+		},
+	}
+}
 func prometheusSpec(cr *promext.PrometheusExt) (*promv1.PrometheusSpec, error) {
 	replicas := int32(1)
 	pvsize := DefaultPVSize
@@ -206,8 +220,6 @@ func prometheusSpec(cr *promext.PrometheusExt) (*promv1.PrometheusSpec, error) {
 			Annotations:       commonPodAnnotations(),
 			CreationTimestamp: metav1.Time{Time: time.Now()},
 		},
-		BaseImage:      cr.Spec.PrometheusConfig.ImageRepo,
-		Version:        cr.Spec.PrometheusConfig.ImageTag,
 		Replicas:       &replicas,
 		EnableAdminAPI: true,
 		Resources:      cr.Spec.PrometheusConfig.Resources,
@@ -260,8 +272,8 @@ func prometheusSpec(cr *promext.PrometheusExt) (*promv1.PrometheusSpec, error) {
 			},
 		},
 	}
-	//Select all rules in current namespace but those for multicloud monitoring
-	//spec.RuleNamespaceSelector = &metav1.LabelSelector{}
+	//Select all rules in all namespaces but those for multicloud monitoring
+	spec.RuleNamespaceSelector = &metav1.LabelSelector{}
 	spec.RuleSelector = &metav1.LabelSelector{
 		MatchExpressions: []metav1.LabelSelectorRequirement{
 			{
@@ -307,6 +319,15 @@ func prometheusSpec(cr *promext.PrometheusExt) (*promv1.PrometheusSpec, error) {
 	}
 	spec.InitContainers = []v1.Container{*initContainer(cr)}
 
+	if cr.Spec.PrometheusConfig.ImageTag != "" {
+		spec.Tag = cr.Spec.PrometheusConfig.ImageTag
+	}
+	if reflect.DeepEqual(spec.Resources, v1.ResourceRequirements{}) {
+		spec.Resources = prometheusDefaultResources()
+	}
+
+	spec.Image = promeImage(cr)
+
 	return spec, nil
 }
 
@@ -319,7 +340,7 @@ func initContainer(cr *promext.PrometheusExt) *v1.Container {
 	p := true
 	return &v1.Container{
 		Name:            "chmod",
-		Image:           cr.Spec.HelperImage,
+		Image:           *imageName(os.Getenv(helperImageEnv), cr.Spec.HelperImage),
 		SecurityContext: &v1.SecurityContext{Privileged: &p},
 		Command:         []string{"/bin/sh", "-c", "if [ ! -d /prometheus ];then mkdir /prometheus; fi;chmod -R 777 /prometheus"},
 		VolumeMounts: []v1.VolumeMount{{
@@ -334,7 +355,7 @@ func scrapeTargetsFileName() string {
 }
 
 //NewScrapeTargetsSecret return secret for prometheus scrape targets
-func NewScrapeTargetsSecret(cr *promext.PrometheusExt, exporter *exportersv1alpha1.Exporter) (*v1.Secret, error) {
+func NewScrapeTargetsSecret(cr *promext.PrometheusExt) (*v1.Secret, error) {
 	var tplBuffer bytes.Buffer
 
 	clusterDomain := defaultClusterDomain
@@ -347,7 +368,7 @@ func NewScrapeTargetsSecret(cr *promext.PrometheusExt, exporter *exportersv1alph
 		Standalone:       !cr.Spec.MCMMonitor.IsHubCluster,
 		CASecretName:     cr.Spec.MonitoringSecret,
 		ClientSecretName: cr.Spec.MonitoringClientSecret,
-		NodeExporter:     exporter != nil && exporter.Spec.NodeExporter.Enable,
+		NodeExporter:     true,
 		ClusterDomain:    clusterDomain,
 	}
 	if err := scrapeTargetsTemplate.Execute(&tplBuffer, paras); err != nil {
@@ -365,7 +386,7 @@ func NewScrapeTargetsSecret(cr *promext.PrometheusExt, exporter *exportersv1alph
 }
 
 //UpdatedScrapeTargetsSecret return secret for prometheus scrape targets
-func UpdatedScrapeTargetsSecret(cr *promext.PrometheusExt, exporter *exportersv1alpha1.Exporter, currentSecret *v1.Secret) (*v1.Secret, error) {
+func UpdatedScrapeTargetsSecret(cr *promext.PrometheusExt, currentSecret *v1.Secret) (*v1.Secret, error) {
 	secret := currentSecret.DeepCopy()
 	var tplBuffer bytes.Buffer
 	clusterDomain := defaultClusterDomain
@@ -377,7 +398,7 @@ func UpdatedScrapeTargetsSecret(cr *promext.PrometheusExt, exporter *exportersv1
 		Standalone:       !cr.Spec.MCMMonitor.IsHubCluster,
 		CASecretName:     cr.Spec.MonitoringSecret,
 		ClientSecretName: cr.Spec.MonitoringClientSecret,
-		NodeExporter:     exporter != nil && exporter.Spec.NodeExporter.Enable,
+		NodeExporter:     true,
 		ClusterDomain:    clusterDomain,
 	}
 	if err := scrapeTargetsTemplate.Execute(&tplBuffer, paras); err != nil {

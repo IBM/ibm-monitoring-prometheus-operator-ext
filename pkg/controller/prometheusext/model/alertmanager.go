@@ -17,6 +17,8 @@
 package model
 
 import (
+	"os"
+	"reflect"
 	"time"
 
 	promv1 "github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
@@ -89,10 +91,8 @@ func NewAlertmanager(cr *promext.PrometheusExt) (*promv1.Alertmanager, error) {
 				Annotations:       commonPodAnnotations(),
 				CreationTimestamp: metav1.Time{Time: time.Now()},
 			},
-			BaseImage:   cr.Spec.AlertManagerConfig.ImageRepo,
-			Version:     cr.Spec.AlertManagerConfig.ImageTag,
 			Replicas:    &replicas,
-			Resources:   cr.Spec.AlertManagerConfig.Resources,
+			Resources:   alertManagerResources(cr),
 			Secrets:     []string{cr.Spec.Certs.MonitoringSecret, cr.Spec.Certs.MonitoringClientSecret},
 			ConfigMaps:  []string{RouterEntryCmName(cr), AlertRouterNgCmName(cr)},
 			RoutePrefix: "/alertmanager",
@@ -131,7 +131,36 @@ func NewAlertmanager(cr *promext.PrometheusExt) (*promv1.Alertmanager, error) {
 		am.Spec.LogLevel = cr.Spec.AlertManagerConfig.LogLevel
 	}
 
+	if cr.Spec.AlertManagerConfig.ImageTag != "" {
+		am.Spec.Tag = cr.Spec.AlertManagerConfig.ImageTag
+	}
+	am.Spec.Image = alertManagerImage(cr)
+
+	if cr.Spec.AlertManagerConfig.ImageRepo != "" {
+		am.Spec.BaseImage = cr.Spec.AlertManagerConfig.ImageRepo
+	}
+
 	return am, nil
+}
+
+func alertManagerImage(cr *promext.PrometheusExt) *string {
+	return imageName(os.Getenv(amImageEnv), cr.Spec.AlertManagerConfig.ImageRepo)
+}
+
+func alertManagerResources(cr *promext.PrometheusExt) v1.ResourceRequirements {
+	mem, _ := resource.ParseQuantity("128Mi")
+	cpu, _ := resource.ParseQuantity("20m")
+	defaultRes := v1.ResourceRequirements{
+		Requests: v1.ResourceList{
+			v1.ResourceMemory: mem,
+			v1.ResourceCPU:    cpu,
+		},
+	}
+
+	if reflect.DeepEqual(cr.Spec.AlertManagerConfig.Resources, v1.ResourceRequirements{}) {
+		return defaultRes
+	}
+	return cr.Spec.AlertManagerConfig.Resources
 }
 
 //UpdatedAlertmanager create updated Alertmanager object
@@ -150,9 +179,11 @@ func UpdatedAlertmanager(cr *promext.PrometheusExt, curr *promv1.Alertmanager) (
 	am.Labels = alertmanagerLabels(cr)
 	am.Spec.PodMetadata.Labels = alertmanagerLabels(cr)
 	am.Spec.PodMetadata.Annotations = commonPodAnnotations()
-	am.Spec.BaseImage = cr.Spec.AlertManagerConfig.ImageRepo
-	am.Spec.Version = cr.Spec.AlertManagerConfig.ImageTag
-	am.Spec.Resources = cr.Spec.AlertManagerConfig.Resources
+	if cr.Spec.AlertManagerConfig.ImageTag != "" {
+		am.Spec.Tag = cr.Spec.AlertManagerConfig.ImageTag
+	}
+	am.Spec.Image = alertManagerImage(cr)
+	am.Spec.Resources = alertManagerResources(cr)
 	am.Spec.Secrets = []string{cr.Spec.Certs.MonitoringSecret, cr.Spec.Certs.MonitoringClientSecret}
 	am.Spec.ConfigMaps = []string{RouterEntryCmName(cr), AlertRouterNgCmName(cr)}
 	am.Spec.Containers = []v1.Container{*NewRouterContainer(cr, Alertmanager)}
