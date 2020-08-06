@@ -7,34 +7,53 @@ metadata:
     app.kubernetes.io/managed-by: ibm-monitoring-prometheusext-operator
   name: ibm-monitoring
 spec:
-    storageClassName: ""
-    grafanaSvcName: "ibm-monitoring-grafana"
-    grafanaSvcPort: 3000
-    clusterPort: 443
-    prometheusConfig:
-      serviceAccount: ibm-monitoring-prometheusext-operand
-      retention: 24h
-      servicePort: 9090
-      nodeMemoryThreshold: 85
-      nodeCPUThreshold: 85
-      logLevel: info
-    alertManagerConfig:
-      serviceAccount: ibm-monitoring-prometheusext-operand
-      servicePort: 9093
-      logLevel: info
-    mcmMonitor:
-      isHubCluster: false
-      serviceAccount: ibm-monitoring-mcm-ctl
-    certs:
-      monitoringSecret: ibm-monitoring-certs
-      monitoringClientSecret: ibm-monitoring-client-certs
-      issuer: cs-ca-clusterissuer
-      autoClean: true
-    iamProvider:
-      idProviderSvc: platform-identity-provider
-      idProviderSvcPort: 4300
-      idManagementSvc: platform-identity-management
-      idManagementSvcPort: 4500
-    prometheusOperator: {}
-
-        
+  storageClassName: ""
+  grafanaSvcName: "ibm-monitoring-grafana"
+  grafanaSvcPort: 3000
+  clusterPort: 443
+  prometheusConfig:
+    serviceAccount: ibm-monitoring-prometheusext-operand
+    retention: 24h
+    servicePort: 9090
+    nodeMemoryThreshold: 85
+    nodeCPUThreshold: 85
+    logLevel: info
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1024Mi
+  alertManagerConfig:
+    serviceAccount: ibm-monitoring-prometheusext-operand
+    servicePort: 9093
+    logLevel: info
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 400m
+        memory: 512Mi
+  mcmMonitor:
+    isHubCluster: false
+    serviceAccount: ibm-monitoring-mcm-ctl
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+  certs:
+    monitoringSecret: ibm-monitoring-certs
+    monitoringClientSecret: ibm-monitoring-client-certs
+    issuer: cs-ca-clusterissuer
+    autoClean: true
+  iamProvider:
+    idProviderSvc: platform-identity-provider
+    idProviderSvcPort: 4300
+    idManagementSvc: platform-identity-management
+    idManagementSvcPort: 4500
+  prometheusOperator: {}
