@@ -207,7 +207,7 @@ spec:
       mediatype: image/svg+xml
   install:
     spec:
-      Permisions:
+      Permissions:
         - rules:
             - apiGroups:
               - ""
