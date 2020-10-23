@@ -84,8 +84,6 @@ func promeDeploymentSpec(cr *promext.PrometheusExt) *appsv1.DeploymentSpec {
 
 }
 func prometneusOperatorContainer(cr *promext.PrometheusExt) *v1.Container {
-	pe := false
-	p := false
 	var cpuLimit resource.Quantity
 	var memLimit resource.Quantity
 	var cpuReq resource.Quantity
@@ -129,10 +127,6 @@ func prometneusOperatorContainer(cr *promext.PrometheusExt) *v1.Container {
 			Name:          "http",
 			ContainerPort: 8080,
 		}},
-		SecurityContext: &v1.SecurityContext{
-			AllowPrivilegeEscalation: &pe,
-			Privileged:               &p,
-		},
 		Resources: v1.ResourceRequirements{
 			Limits: v1.ResourceList{
 
