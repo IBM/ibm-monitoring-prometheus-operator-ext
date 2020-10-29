@@ -448,7 +448,8 @@ spec:
               - securitycontextconstraints
               verbs:
               - create
-              - update           
+              - update
+              - get           
           serviceAccountName: ibm-monitoring-prometheus-operator-ext
       deployments:
         - name: ibm-monitoring-prometheus-operator-ext
