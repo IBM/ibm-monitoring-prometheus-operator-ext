@@ -193,6 +193,10 @@ spec:
                 serviceAccount:
                   type: string
               type: object
+            nodeSelector:
+              additionalProperties:
+                type: string
+              type: object
             prometheusConfig:
               description: Configurations for prometheus
               properties:

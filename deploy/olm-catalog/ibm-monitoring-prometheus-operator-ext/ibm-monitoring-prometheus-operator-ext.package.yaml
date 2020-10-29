@@ -1,7 +1,7 @@
 channels:
-  - currentCSV: ibm-monitoring-prometheus-operator-ext.v1.9.1
+  - currentCSV: ibm-monitoring-prometheus-operator-ext.v1.9.3
     name: stable-v1
-  - currentCSV: ibm-monitoring-prometheus-operator-ext.v1.9.2
+  - currentCSV: ibm-monitoring-prometheus-operator-ext.v1.9.3
     name: beta
   - currentCSV: ibm-monitoring-prometheus-operator-ext.v1.9.4
     name: dev
