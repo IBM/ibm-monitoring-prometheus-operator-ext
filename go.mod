@@ -49,6 +49,8 @@ replace (
 	github.com/jetstack/cert-manager => github.com/jetstack/cert-manager v0.10.0
 )
 
+replace github.com/gogo/protobuf => github.com/gogo/protobuf v1.3.2
+
 replace github.com/docker/docker => github.com/moby/moby v0.7.3-0.20190826074503-38ab9da00309 // Required by Helm
 
 replace github.com/openshift/api => github.com/openshift/api v0.0.0-20190924102528-32369d4db2ad // Required until https://github.com/operator-framework/operator-lifecycle-manager/pull/1241 is resolved
