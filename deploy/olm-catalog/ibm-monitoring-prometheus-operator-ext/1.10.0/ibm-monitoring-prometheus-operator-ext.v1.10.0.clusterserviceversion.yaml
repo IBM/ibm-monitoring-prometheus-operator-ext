@@ -527,5 +527,4 @@ spec:
       url: https://www.prometheus.io/
   provider:
     name: IBM
-  replaces: ibm-monitoring-prometheus-operator-ext.v1.9.5
   version: 1.10.0
