@@ -302,6 +302,8 @@ const (
         labels:
           metrics_type: system
       {{- end }}
+        labels:
+          namespace: {{ .Namespace }}
     metrics_path: /prometheus/metrics
 
   # A scrape configuration for running Prometheus on a Kubernetes cluster.
@@ -573,16 +575,16 @@ const (
         regex: __meta_kubernetes_service_label_(.+)
       - source_labels: [__meta_kubernetes_namespace]
         action: replace
-        target_label: kubernetes_namespace
+        target_label: namespace
       - source_labels: [__meta_kubernetes_service_name]
         action: replace
         target_label: kubernetes_name
 
     metric_relabel_configs:
+    {{- if not .Standalone }}
       - source_labels: ['namespace']
         regex: (.+)
         target_label: kubernetes_namespace
-    {{- if not .Standalone }}
       - source_labels: ['kubernetes_namespace']
         regex: (.*)
         target_label: hub_kubernetes_namespace

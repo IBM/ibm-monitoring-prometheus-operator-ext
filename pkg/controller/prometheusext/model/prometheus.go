@@ -373,6 +373,7 @@ func NewScrapeTargetsSecret(cr *promext.PrometheusExt) (*v1.Secret, error) {
 		ClientSecretName: cr.Spec.MonitoringClientSecret,
 		NodeExporter:     true,
 		ClusterDomain:    clusterDomain,
+		Namespace:        cr.Namespace,
 	}
 	if err := scrapeTargetsTemplate.Execute(&tplBuffer, paras); err != nil {
 		return nil, err
@@ -403,6 +404,7 @@ func UpdatedScrapeTargetsSecret(cr *promext.PrometheusExt, currentSecret *v1.Sec
 		ClientSecretName: cr.Spec.MonitoringClientSecret,
 		NodeExporter:     true,
 		ClusterDomain:    clusterDomain,
+		Namespace:        cr.Namespace,
 	}
 	if err := scrapeTargetsTemplate.Execute(&tplBuffer, paras); err != nil {
 		return nil, err
@@ -424,6 +426,7 @@ type scrapeTargetConfigParas struct {
 	ClientSecretName string
 	NodeExporter     bool
 	ClusterDomain    string
+	Namespace        string
 }
 
 var (
