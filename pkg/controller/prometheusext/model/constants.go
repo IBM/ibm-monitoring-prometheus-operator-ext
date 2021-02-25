@@ -302,6 +302,8 @@ const (
         labels:
           metrics_type: system
       {{- end }}
+        labels:
+          kubernetes_namespace: {{ .Namespace }}
     metrics_path: /prometheus/metrics
 
   # A scrape configuration for running Prometheus on a Kubernetes cluster.
