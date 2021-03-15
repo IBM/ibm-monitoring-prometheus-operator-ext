@@ -70,6 +70,17 @@ func UpdatedMCMCtlDeployment(cr *promext.PrometheusExt, curr *appsv1.Deployment)
 	deployment.Spec.Template.Spec.ImagePullSecrets = spec.Template.Spec.ImagePullSecrets
 	deployment.Spec.Template.Spec.ServiceAccountName = spec.Template.Spec.ServiceAccountName
 	deployment.Spec.Template.Spec.NodeSelector = cr.Spec.NodeSelector
+
+	certmanagerLabel := "certmanager.k8s.io/time-restarted"
+	// Preserve cert-manager added labels in metadata
+	if val, ok := curr.ObjectMeta.Labels[certmanagerLabel]; ok {
+		deployment.ObjectMeta.Labels[certmanagerLabel] = val
+	}
+
+	// Preserve cert-manager added labels in spec
+	if val, ok := curr.Spec.Template.ObjectMeta.Labels[certmanagerLabel]; ok {
+		deployment.Spec.Template.ObjectMeta.Labels[certmanagerLabel] = val
+	}
 	return deployment, nil
 
 }
