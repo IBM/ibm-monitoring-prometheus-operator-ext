@@ -75,18 +75,18 @@ spec:
             - name: OPERATOR_NAME
               value: "ibm-monitoring-prometheusext-operator"
             - name: AM_IMAGE
-              value: quay.io/opencloudio/alertmanager@sha256:3b7d78681b1163c655a7fee480af80b926ebd30a702dcbc8845b88a7cd00a9c7
+              value: quay.io/opencloudio/alertmanager:v0.20.0-build.7
             - name: PROME_IMAGE
-              value: quay.io/opencloudio/prometheus@sha256:64b44a34a7ffb46d6d7a3a3a3e9e5b2648688bab87db40acf1b3fe28efc44df9
+              value: quay.io/opencloudio/prometheus:v2.15.2-build.7
             - name: CM_RELOAD_IMAGE
-              value: quay.io/opencloudio/configmap-reload@sha256:f475ee1b178a0020414c670d98d9df0810718b7a45ff95a4057ebf4905a14f9b
+              value: quay.io/opencloudio/configmap-reload:v0.2.2-build.9
             - name: PROM_OP_IMAGE
-              value: quay.io/opencloudio/prometheus-operator@sha256:97c5647038f5ebc5c5923ef20e61cdf51a3321d7360000ad3b78fb6a38b2daf7
+              value: quay.io/opencloudio/prometheus-operator:v0.34-build.8
             - name: PROM_CONF_IMAGE
-              value: quay.io/opencloudio/prometheus-config-reloader@sha256:6d76da1fe18ac9c343dbd104d2763e2918c9ed89b7dac659907286eda9fe0e94
+              value: quay.io/opencloudio/prometheus-config-reloader:v0.34-build.8
             - name: ROUTER_IMAGE
-              value: quay.io/opencloudio/icp-management-ingress@sha256:6641653b351901eb9352e06479d75a4babaf746bcd63381a09a58d9192b0953c
+              value: quay.io/opencloudio/icp-management-ingress:2.5.11
             - name: MCM_HELPER_IMAGE
-              value: quay.io/opencloudio/icp-initcontainer@sha256:87b30476a024b7a3870cd6b68c0f859cd29b908e9c99f07375f3dfb29d00b963
+              value: quay.io/opencloudio/icp-initcontainer:1.0.0-build.10
             - name: MCM_IMAGE
-              value: quay.io/opencloudio/prometheus-controller@sha256:6a4656104448b38c4ef8802133f2960090fbaea3a80baef4939e96b6f4b3c646
+              value: quay.io/opencloudio/prometheus-controller:v1.1.0-build.10
