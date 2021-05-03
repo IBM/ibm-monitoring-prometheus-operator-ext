@@ -474,21 +474,21 @@ spec:
                             fieldPath: metadata.name
                       - name: OPERATOR_NAME
                         value: ibm-monitoring-prometheusext-operator
-                      - name: AM_IMAGE
+                      - name: ALERTMANAGER_IMAGE
                         value: quay.io/opencloudio/alertmanager:v0.20.0-build.7
-                      - name: PROME_IMAGE
+                      - name: PROMETHEUS_IMAGE
                         value: quay.io/opencloudio/prometheus:v2.15.2-build.7
-                      - name: CM_RELOAD_IMAGE
+                      - name: CONFIGMAP_RELOAD_IMAGE
                         value: quay.io/opencloudio/configmap-reload:v0.2.2-build.9
-                      - name: PROM_OP_IMAGE
+                      - name: PROMETHEUS_OPERATOR_IMAGE
                         value: quay.io/opencloudio/prometheus-operator:v0.34-build.8
-                      - name: PROM_CONF_IMAGE
+                      - name: PROMETHEUS_CONFIG_RELOADER_IMAGE
                         value: quay.io/opencloudio/prometheus-config-reloader:v0.34-build.8
-                      - name: ROUTER_IMAGE
+                      - name: ICP_MANAGEMENT_INGRESS_IMAGE
                         value: quay.io/opencloudio/icp-management-ingress:2.5.11
-                      - name: MCM_HELPER_IMAGE
+                      - name: ICP_INITCONTAINER_IMAGE
                         value: quay.io/opencloudio/icp-initcontainer:1.0.0-build.10
-                      - name: MCM_IMAGE
+                      - name: PROMETHEUS_CONTROLLER_IMAGE
                         value: quay.io/opencloudio/prometheus-controller:v1.1.0-build.10
                     image: quay.io/opencloudio/ibm-monitoring-prometheusext-operator
                     imagePullPolicy: Always
