@@ -55,14 +55,14 @@ const (
 	defaultClusterDomain = "cluster.local"
 	defaultClusterName   = "mycluster"
 
-	amImageEnv        = "AM_IMAGE"
-	promeImageEnv     = "PROME_IMAGE"
-	cmReloadImageEnv  = "CM_RELOAD_IMAGE"
-	promeOPImageEnv   = "PROM_OP_IMAGE"
-	promeConfImageEnv = "PROM_CONF_IMAGE"
-	routerImageEnv    = "ROUTER_IMAGE"
-	helperImageEnv    = "MCM_HELPER_IMAGE"
-	mcmImageEnv       = "MCM_IMAGE"
+	amImageEnv        = "ALERTMANAGER_IMAGE"
+	promeImageEnv     = "PROMETHEUS_IMAGE"
+	cmReloadImageEnv  = "CONFIGMAP_RELOAD_IMAGE"
+	promeOPImageEnv   = "PROMETHEUS_OPERATOR_IMAGE"
+	promeConfImageEnv = "PROMETHEUS_CONFIG_RELOADER_IMAGE"
+	routerImageEnv    = "ICP_MANAGEMENT_INGRESS_IMAGE"
+	helperImageEnv    = "ICP_INITCONTAINER_IMAGE"
+	mcmImageEnv       = "PROMETHEUS_CONTROLLER_IMAGE"
 
 	imageDigestKey = `sha256:`
 
