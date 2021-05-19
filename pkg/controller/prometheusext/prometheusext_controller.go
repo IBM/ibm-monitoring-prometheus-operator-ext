@@ -18,7 +18,6 @@ package prometheusext
 
 import (
 	"context"
-	"time"
 
 	promev1 "github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
 	secv1client "github.com/openshift/client-go/security/clientset/versioned/typed/security/v1"
@@ -34,8 +33,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/source"
 
 	monitoringv1alpha1 "github.com/IBM/ibm-monitoring-prometheus-operator-ext/pkg/apis/monitoring/v1alpha1"
-	"github.com/IBM/ibm-monitoring-prometheus-operator-ext/pkg/controller/prometheusext/model"
-	"github.com/IBM/ibm-monitoring-prometheus-operator-ext/pkg/controller/prometheusext/reconsiler"
 )
 
 var log = logf.Log.WithName("controller_prometheusext")
@@ -141,22 +138,6 @@ func (r *ReconcilePrometheusExt) Reconcile(request reconcile.Request) (reconcile
 		}
 		// Error reading the object - requeue the request.
 		return reconcile.Result{}, err
-	}
-	reconsiler := reconsiler.Reconsiler{
-		Client:    r.client,
-		SecClient: r.secClient,
-		CR:        instance.DeepCopy(),
-		Schema:    r.scheme,
-		Context:   ctx,
-	}
-	if err := reconsiler.ReadClusterState(); err != nil {
-		return reconcile.Result{}, err
-	}
-	if err := reconsiler.Sync(); err != nil {
-		if !model.IsRequeueErr(err) {
-			return reconcile.Result{}, err
-		}
-		return reconcile.Result{Requeue: true, RequeueAfter: time.Second}, nil
 	}
 
 	return reconcile.Result{}, nil
