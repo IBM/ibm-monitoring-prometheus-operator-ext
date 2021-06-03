@@ -98,6 +98,25 @@ metadata:
   name: ibm-monitoring-prometheus-operator-ext.v1.11.0
   namespace: placeholder
 spec:
+  relatedImages:
+    - name: ALERTMANAGER_IMAGE
+      image: quay.io/opencloudio/alertmanager:v0.20.0-build.7
+    - name: PROMETHEUS_IMAGE
+      image: quay.io/opencloudio/prometheus:v2.15.2-build.7
+    - name: CONFIGMAP_RELOAD_IMAGE
+      image: quay.io/opencloudio/configmap-reload:v0.2.2-build.9
+    - name: PROMETHEUS_OPERATOR_IMAGE
+      image: quay.io/opencloudio/prometheus-operator:v0.34-build.8
+    - name: PROMETHEUS_CONFIG_RELOADER_IMAGE
+      image: quay.io/opencloudio/prometheus-config-reloader:v0.34-build.8
+    - name: ICP_MANAGEMENT_INGRESS_IMAGE
+      image: quay.io/opencloudio/icp-management-ingress:2.5.11
+    - name: ICP_INITCONTAINER_IMAGE
+      image: quay.io/opencloudio/icp-initcontainer:1.0.0-build.10
+    - name: PROMETHEUS_CONTROLLER_IMAGE
+      image: quay.io/opencloudio/prometheus-controller:v1.1.0-build.10
+    - name: ibm-monitoring-prometheusext-operator
+      image: quay.io/opencloudio/ibm-monitoring-prometheusext-operator
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
