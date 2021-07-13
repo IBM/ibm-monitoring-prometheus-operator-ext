@@ -104,9 +104,9 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-      - description:
-          PrometheusExt will start Prometheus and Alertmanager instances
-          with RBAC enabled. It will also enable Multicloud monitoring
+      - description: 'Documentation For additional details regarding install parameters
+        check: https://ibm.biz/icpfs39install. License By installing this product
+        you accept the license terms https://ibm.biz/icpfs39license'
         displayName: Prometheus Operator Extension
         kind: PrometheusExt
         name: prometheusexts.monitoring.operator.ibm.com
