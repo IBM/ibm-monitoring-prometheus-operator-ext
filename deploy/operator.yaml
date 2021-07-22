@@ -47,7 +47,7 @@ spec:
           image: quay.io/opencloudio/ibm-monitoring-prometheusext-operator
           command:
             - ibm-monitoring-prometheusext-operator
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           securityContext:
             privileged: false
             allowPrivilegeEscalation: false

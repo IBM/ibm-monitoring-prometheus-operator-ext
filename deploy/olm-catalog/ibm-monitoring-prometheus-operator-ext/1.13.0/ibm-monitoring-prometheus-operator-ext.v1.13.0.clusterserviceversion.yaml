@@ -475,7 +475,7 @@ spec:
                       - name: OPERATOR_NAME
                         value: ibm-monitoring-prometheusext-operator
                     image: quay.io/opencloudio/ibm-monitoring-prometheusext-operator
-                    imagePullPolicy: Always
+                    imagePullPolicy: IfNotPresent
                     name: ibm-monitoring-prometheus-operator-ext
                     resources:
                       limits:
