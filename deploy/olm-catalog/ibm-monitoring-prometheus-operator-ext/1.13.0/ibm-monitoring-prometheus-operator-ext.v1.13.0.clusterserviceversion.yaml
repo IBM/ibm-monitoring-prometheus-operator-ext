@@ -10,7 +10,7 @@ metadata:
     operatorframework.io/arch.amd64: supported
     operatorframework.io/arch.ppc64le: supported
   annotations:
-    olm.skipRange: "<1.12.0"
+    olm.skipRange: "<1.13.0"
     alm-examples: |-
       [
         {
@@ -85,17 +85,16 @@ metadata:
           }
         }
       ]
-    capabilities: Basic Install
+    capabilities: Seamless Upgrades
     categories: Monitoring
     certified: "false"
-    createdAt: "2020-03-25 12:00:00"
     description:
       Deploys Prometheus and Alertmanager instances with RBAC enabled.
       It will also enable Multicloud monitoring
     repository: https://github.com/IBM/ibm-monitoring-prometheus-operator-ext
     containerImage: quay.io/opencloudio/ibm-monitoring-prometheusext-operator
     support: IBM
-  name: ibm-monitoring-prometheus-operator-ext.v1.12.0
+  name: ibm-monitoring-prometheus-operator-ext.v1.13.0
   namespace: placeholder
 spec:
   relatedImages:
@@ -476,7 +475,7 @@ spec:
                       - name: OPERATOR_NAME
                         value: ibm-monitoring-prometheusext-operator
                     image: quay.io/opencloudio/ibm-monitoring-prometheusext-operator
-                    imagePullPolicy: Always
+                    imagePullPolicy: IfNotPresent
                     name: ibm-monitoring-prometheus-operator-ext
                     resources:
                       limits:
@@ -513,5 +512,5 @@ spec:
       url: https://www.prometheus.io/
   provider:
     name: IBM
-  replaces: ibm-monitoring-prometheus-operator-ext.v1.11.0
-  version: 1.12.0
+  replaces: ibm-monitoring-prometheus-operator-ext.v1.12.0
+  version: 1.13.0
