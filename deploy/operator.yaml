@@ -74,19 +74,19 @@ spec:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
               value: "ibm-monitoring-prometheusext-operator"
-            - name: AM_IMAGE
-              value: quay.io/opencloudio/alertmanager@sha256:e06f2cb6c71a2586be0ba6d834077f006b30d7a49a1596687d5792aea3018268
-            - name: PROME_IMAGE
-              value: quay.io/opencloudio/prometheus@sha256:0182dec2ad121b4aed2b705ef8d0d7dcbb9ce6c00074a127d0d06864f42f3a93
-            - name: CM_RELOAD_IMAGE
-              value: quay.io/opencloudio/configmap-reload@sha256:9a89ae4d9ef86d1907447947943baf991fad7126e85c1317d41e222ba36a967c
-            - name: PROM_OP_IMAGE
-              value: quay.io/opencloudio/prometheus-operator@sha256:0745ff9cf064422ac79a07772f2efd2e961876d3656609a41db485edaa61344d
-            - name: PROM_CONF_IMAGE
-              value: quay.io/opencloudio/prometheus-config-reloader@sha256:1207fe086716c24e9f46f486d90f11f57692644534a84a2ecfa1c73b2b1a45d7
-            - name: ROUTER_IMAGE
-              value: quay.io/opencloudio/icp-management-ingress@sha256:da043f29eee4eaeb9a42945c075d1e9240958ccf2a9927770b056fb925d93c20
-            - name: MCM_HELPER_IMAGE
-              value: quay.io/opencloudio/icp-initcontainer@sha256:60699eab29e17db05963ed19f8bbd0c6124b2b6d19c2d2563698660f9f46997e
-            - name: MCM_IMAGE
-              value: quay.io/opencloudio/prometheus-controller@sha256:3b669540a47b59cb09802c126146fe59a39cc3232617b6f51cf3aac65335ae24
+            - name: ALERTMANAGER_IMAGE
+              value: quay.io/opencloudio/alertmanager:v0.20.0-build.7
+            - name: PROMETHEUS_IMAGE
+              value: quay.io/opencloudio/prometheus:v2.15.2-build.7
+            - name: CONFIGMAP_RELOAD_IMAGE
+              value: quay.io/opencloudio/configmap-reload:v0.2.2-build.9
+            - name: PROMETHEUS_OPERATOR_IMAGE
+              value: quay.io/opencloudio/prometheus-operator:v0.34-build.8
+            - name: PROMETHEUS_CONFIG_RELOADER_IMAGE
+              value: quay.io/opencloudio/prometheus-config-reloader:v0.34-build.8
+            - name: ICP_MANAGEMENT_INGRESS_IMAGE
+              value: quay.io/opencloudio/icp-management-ingress:2.5.11
+            - name: ICP_INITCONTAINER_IMAGE
+              value: quay.io/opencloudio/icp-initcontainer:1.0.0-build.10
+            - name: PROMETHEUS_CONTROLLER_IMAGE
+              value: quay.io/opencloudio/prometheus-controller:v1.1.0-build.10
