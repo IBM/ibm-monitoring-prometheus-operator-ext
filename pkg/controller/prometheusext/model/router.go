@@ -407,6 +407,7 @@ func NewRouterContainer(cr *promext.PrometheusExt, ot ObjectType) *v1.Container 
 			},
 			InitialDelaySeconds: 30,
 			PeriodSeconds:       10,
+			TimeoutSeconds:      10,
 		}
 		lprobe := rprobe.DeepCopy()
 		lprobe.PeriodSeconds = 20
